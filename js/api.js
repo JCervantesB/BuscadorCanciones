@@ -12,10 +12,23 @@ class API {
         fetch(url)
             .then(respuesta => respuesta.json())
             .then(resultado => {
-                const { lyrics } = resultado;
 
-                UI.divResultado.textContent = lyrics;
-                UI.headingResultado.textContent = `Letra de la cancion ${this.cancion} de ${this.artista}`;
+                if (resultado.lyrics) {
+
+                    const { lyrics } = resultado;
+
+                    UI.divResultado.textContent = lyrics;
+                    UI.headingResultado.textContent = `Letra de la cancion ${this.cancion} de ${this.artista}`;
+                } else {
+                    UI.divMensajes.textContent = 'La canción no existe, intenta con otra búsqueda';
+
+                    UI.divMensajes.classList.add('error');
+
+                    setTimeout(() => {
+                        UI.divMensajes.textContent = '';
+                        UI.divMensajes.classList.remove('error');
+                    }, 3000);
+                }
             })
     }
 }
@@ -43,6 +56,10 @@ function spinner() {
     `;
 
     UI.headingResultado.appendChild(divSpiner);
+
+    setTimeout(() => {
+        UI.headingResultado.remove();
+    }, 2500);
 }
 
 function limpiarHTML() {
